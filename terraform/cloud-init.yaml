@@ -1,0 +1,58 @@
+#cloud-config
+# First boot: Node 22, nginx in front of the game (WebSockets forwarded), a systemd service that
+# restarts the game if it ever dies. The game files themselves arrive with scripts/deploy.sh.
+package_update: true
+packages:
+  - nginx
+  - rsync
+  - curl
+
+write_files:
+  - path: /etc/systemd/system/nexus.service
+    content: |
+      [Unit]
+      Description=Nexus Breach
+      After=network.target
+
+      [Service]
+      WorkingDirectory=/opt/nexus
+      EnvironmentFile=/etc/nexus.env
+      Environment=NODE_ENV=production
+      Environment=PORT=3000
+      Environment=STATE_FILE=/var/lib/nexus/state.json
+      ExecStart=/usr/bin/node server/index.js
+      Restart=always
+      RestartSec=1
+      User=ubuntu
+      LimitNOFILE=65536
+
+      [Install]
+      WantedBy=multi-user.target
+  - path: /etc/nginx/sites-available/nexus
+    content: |
+      server {
+        listen 80 default_server;
+        listen [::]:80 default_server;
+        client_max_body_size 1m;
+        location / {
+          proxy_pass http://127.0.0.1:3000;
+          proxy_http_version 1.1;
+          proxy_set_header Upgrade $http_upgrade;
+          proxy_set_header Connection "upgrade";
+          proxy_set_header Host $host;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_read_timeout 3600s;
+          proxy_send_timeout 3600s;
+        }
+      }
+
+runcmd:
+  - curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
+  - apt-get install -y nodejs
+  # 1 GB of swap: harmless on t3.small, a safety net on 1 GB instances
+  - fallocate -l 1G /swapfile && chmod 600 /swapfile && mkswap /swapfile && swapon /swapfile && echo '/swapfile none swap sw 0 0' >> /etc/fstab
+  - mkdir -p /opt/nexus /var/lib/nexus && chown ubuntu:ubuntu /opt/nexus /var/lib/nexus
+  - touch /etc/nexus.env && chmod 600 /etc/nexus.env
+  - rm -f /etc/nginx/sites-enabled/default && ln -sf /etc/nginx/sites-available/nexus /etc/nginx/sites-enabled/nexus
+  - systemctl daemon-reload && systemctl enable nexus && systemctl restart nginx
+  - touch /var/lib/cloud/instance/nexus-ready
