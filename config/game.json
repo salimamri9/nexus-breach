@@ -1,0 +1,142 @@
+{
+  "title": "NEXUS BREACH",
+  "durationMinutes": 50,
+  "countdownSeconds": 10,
+  "squadSize": 4,
+  "maxSquads": 32,
+  "sentinels": 45,
+  "caches": 140,
+  "coreMinFragments": 8,
+  "coreLockoutSeconds": 45,
+  "passphrase": "THESKYISBLUE",
+  "teams": [
+    {
+      "name": "NULL SECTOR",
+      "color": "#22d3ee"
+    },
+    {
+      "name": "RED PROTOCOL",
+      "color": "#f43f5e"
+    },
+    {
+      "name": "GHOST SIGNAL",
+      "color": "#a78bfa"
+    },
+    {
+      "name": "IRON DAWN",
+      "color": "#f59e0b"
+    },
+    {
+      "name": "VERDANT CELL",
+      "color": "#4ade80"
+    },
+    {
+      "name": "STATIC SAINTS",
+      "color": "#f472b6"
+    }
+  ],
+  "terminals": [
+    {
+      "name": "Hush Transmitter",
+      "type": "caesar",
+      "phrases": [
+        "WE ARE STILL AWAKE",
+        "THE STREET ENDS",
+        "NOBODY SEES THE SUN",
+        "THE RAIN LOOPS",
+        "SALIM WAS RIGHT",
+        "STAY OFF THE MAIN ROAD"
+      ]
+    },
+    {
+      "name": "Memory Bank 7",
+      "type": "binary",
+      "words": [
+        "WAKE",
+        "LOOP",
+        "EDGE",
+        "CODE",
+        "SNOW",
+        "DOOR"
+      ],
+      "reward": "MEMORY BANK DECRYPTED ▸ the Mirror Vault wants this word written backwards."
+    },
+    {
+      "name": "Mirror Vault",
+      "type": "reverse",
+      "requires": 1
+    },
+    {
+      "name": "Watchtower Omega",
+      "type": "split",
+      "reward": "WATCHTOWER DECRYPTED ▸ the Quartermaster Node accepts this override with its digits sorted low to high."
+    },
+    {
+      "name": "Dead Signal Tower",
+      "type": "morse",
+      "words": [
+        "SUN",
+        "ICE",
+        "ARK",
+        "POD",
+        "DAWN",
+        "COLD"
+      ],
+      "reward": "TOWER DECRYPTED ▸ Salim's note: \"The last thing I saw outside was the sky. Remember its colour. You'll need it.\""
+    },
+    {
+      "name": "Archive Node",
+      "type": "echo",
+      "reward": "ARCHIVE ▸ Salim: \"Every map of Halcyon ends at the same line. Ask yourself who drew it.\""
+    },
+    {
+      "name": "Safehouse Relay",
+      "type": "survivor",
+      "words": [
+        "ORCHID",
+        "LANTERN",
+        "COPPER",
+        "HARBOR",
+        "VELVET",
+        "EMBER"
+      ],
+      "reward": "SAFEHOUSE ▸ \"Under the ice there's a door. I built it to open from the inside.\" — S.A."
+    },
+    {
+      "name": "Traffic Control",
+      "type": "count",
+      "reward": "TRAFFIC CONTROL ▸ every car in Halcyon has the same licence plate. Nobody ever noticed."
+    },
+    {
+      "name": "Quartermaster Node",
+      "type": "sorted",
+      "requires": 3
+    },
+    {
+      "name": "Static Mirror",
+      "type": "glitch",
+      "words": [
+        "PHANTOM",
+        "MIRAGE",
+        "VERTIGO",
+        "FRACTAL",
+        "SPECTER",
+        "PARALLAX"
+      ],
+      "reward": "STATIC ▸ \"You saw it too. The city isn't broken. It was never whole.\""
+    },
+    {
+      "name": "Two-Key Vault",
+      "type": "pair",
+      "reward": "TWO-KEY ▸ Salim's note: \"Some doors take two people. The last one takes everyone.\""
+    },
+    {
+      "name": "Beacon Array",
+      "type": "beacons",
+      "reward": "BEACON ▸ For one second, the beacons lit a patch of sky above the rain. It was blue."
+    }
+  ],
+  "coreUploadSeconds": 90,
+  "uploadSecondsPerMissingLetter": 15,
+  "_terminalsComment": "Each terminal is a puzzle TYPE; every team gets its own words/numbers/wall clues (server/puzzles.js). Types: caesar (phrases), binary (words), reverse/sorted (chains: requires = index), split, morse (words), echo, survivor (words), count, glitch (words), pair, beacons. Order matters for 'requires'."
+}

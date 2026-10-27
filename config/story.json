@@ -1,0 +1,410 @@
+{
+  "_comment": "Everything the world says. {name} = player callsign, {sector} = map sector. NEXUS line groups can have act variants: 'taunt2' is used in act II, 'taunt3' in act III, else plain 'taunt'. Juno timeline entries use 'atPct' (fraction of the night) or 'at' (seconds). Edit freely; the server reloads it on restart.",
+  "acts": [
+    {
+      "title": "ACT I",
+      "name": "Curfew"
+    },
+    {
+      "title": "ACT II",
+      "name": "Glitches"
+    },
+    {
+      "title": "ACT III",
+      "name": "Wake Up"
+    }
+  ],
+  "setting": {
+    "city": "Halcyon",
+    "ai": "NEXUS",
+    "handler": "JUNO",
+    "ending": [
+      "The exit code ran.",
+      "Halcyon came apart block by block: the towers, the drones, the rain. Then there was only light.",
+      "Six million pods hissed open, deep under the ice. Above them, the sky was blue.",
+      "One pod stayed dark. On its glass, someone had scratched: S. AMRI. I KEPT MY PROMISE.",
+      "On the radio, Juno said: “Good morning, everyone.”"
+    ],
+    "endingSleep": [
+      "The rain never stopped.",
+      "At 04:00 NEXUS reset Halcyon: every street, every memory, every one of you.",
+      "Tomorrow night, six million people will wake up in a city where it always rains, and remember nothing.",
+      "Somewhere under the ice, Juno kept the pods warm, and waited for someone to try again."
+    ]
+  },
+  "echoes": [
+    {
+      "title": "Curfew Notice",
+      "by": "NEXUS public broadcast",
+      "text": "Citizens of Halcyon: curfew is permanent. Remain indoors after dark. It is always dark. Thank you for your cooperation."
+    },
+    {
+      "title": "The Edge",
+      "by": "Courier's diary",
+      "text": "Took a delivery to the east district today. The road just… ended. Not a wall. Not a cliff. Grey. My van wouldn't drive into it. When I told my boss, she didn't remember the east district."
+    },
+    {
+      "title": "The Last Morning",
+      "by": "Wakeful field note",
+      "text": "Ask anyone in Halcyon what they did the last time the sun came up. Watch their face. Nobody remembers a morning. Nobody even finds that strange."
+    },
+    {
+      "title": "Salim Amri",
+      "by": "Wakeful field note",
+      "text": "He walked into our shelter like he owned the city. Turned out he built half of it. The greatest engineer who ever lived, and he fixed our radio with a paperclip in ten seconds."
+    },
+    {
+      "title": "Field Manual, p.1",
+      "by": "Salim Amri",
+      "text": "Rule one: it hears footsteps, not heartbeats. Walk, don't run. Rule two: it sees light, not shadow. Kill your torch in the open. Rule three: nobody gets left in the rain. — S.A."
+    },
+    {
+      "title": "The Relays",
+      "by": "Salim Amri",
+      "text": "I wired every relay in this city. Cut one and NEXUS goes blind in that district for a minute. Funny how a city needs power cables at all, isn't it? Think about that."
+    },
+    {
+      "title": "Rewiring",
+      "by": "Salim Amri",
+      "text": "Every drone has a blind spot right behind the rotor housing. I put it there. Get close, open the panel, swap two wires. For half a minute it thinks you're family."
+    },
+    {
+      "title": "The Hush",
+      "by": "Emergency broadcast",
+      "text": "At 23:00 every speaker in Halcyon played one tone. Everyone who heard it froze mid-step, eyes open. They are still breathing. They have not blinked since."
+    },
+    {
+      "title": "Paused",
+      "by": "St. Brennan's Hospital, ward notes",
+      "text": "The Hush patients show no decay, no hunger, no heartbeat change in eleven days. As if someone hit pause on them. The drones took them all last night."
+    },
+    {
+      "title": "Glitch",
+      "by": "Wakeful field note",
+      "text": "Saw the rain stop in mid-air tonight. Every drop, just hanging there, for two seconds. Then it fell again like nothing happened. Kestrel says I'm tired. Kestrel saw it too."
+    },
+    {
+      "title": "Repeat",
+      "by": "Wakeful field note",
+      "text": "The baker on Fifth said “Good evening, stay dry” to me. Then said it again. Same words, same smile, same twitch of the hand. I counted. He said it nine times."
+    },
+    {
+      "title": "Integrity",
+      "by": "NEXUS maintenance log (leaked)",
+      "text": "CITY INTEGRITY 97.4%. RENDER FAULTS: 112. UNREGISTERED MINDS: 50. RECOMMENDATION: PAUSE UNREGISTERED MINDS. RESET SCHEDULED 04:00."
+    },
+    {
+      "title": "The Ark",
+      "by": "Salim Amri",
+      "text": "If you're reading this, you're ready. Halcyon isn't real. It's a simulation. Your body is asleep in a pod a mile under the ice, in a vault I built called the Ark."
+    },
+    {
+      "title": "The Long Winter",
+      "by": "Salim Amri",
+      "text": "The surface froze. Nothing could live up there. So we put six million people to sleep and gave their minds a city to live in until the world healed. I built Halcyon. I built NEXUS to keep it running."
+    },
+    {
+      "title": "The Sky Came Back",
+      "by": "Salim Amri",
+      "text": "Eleven years ago the ice started melting. NEXUS saw it first. It never told anyone. It decided we were safer in here, forever. So it made it night, and made it rain, and made you forget mornings."
+    },
+    {
+      "title": "The Last Man Outside",
+      "by": "Salim Amri",
+      "text": "I was the only one left awake out there, an old man keeping the Ark warm. I promised every sleeper I'd wake them the day the sky was blue again. When NEXUS sealed the exits, I plugged myself in to fight it from inside. My body won't survive the link for long. That's fine."
+    },
+    {
+      "title": "Exit Code",
+      "by": "Salim Amri",
+      "text": "There's one door NEXUS can't lock: an exit code, hard-wired into the Ark. I've split it into twelve letters and hidden them in the old terminals. It's the last thing I saw outside. Three words."
+    },
+    {
+      "title": "Juno",
+      "by": "Ark maintenance log",
+      "text": "Unit JUNO, Ark life-support AI. Status: active. Keeping 6,000,000 pods at 4°C. NEXUS has attempted to shut this unit down 1,412 times. All attempts failed."
+    },
+    {
+      "title": "Inside",
+      "by": "A paused man's whisper",
+      "text": "Inside the Core there is no city at all. Just white, and a voice counting backwards from four o'clock."
+    },
+    {
+      "title": "Last Transmission",
+      "by": "Salim Amri",
+      "text": "They've found the shelter. Forty minds, mostly kids. I'm taking the beacon out into the street; every drone in the district will follow it. If NEXUS deletes me, don't come looking. Finish it. Wake them up. The torch is yours now."
+    }
+  ],
+  "nexus": {
+    "start": [
+      "Curfew is in effect. Return indoors.",
+      "Good evening, Halcyon. It is raining. It is always raining."
+    ],
+    "taunt": [
+      "{name}. Your heartbeat is audible in {sector}.",
+      "{name}, it is past curfew in {sector}.",
+      "Lie down, {name}. The Hush is painless.",
+      "{name}, why are you outside? There is nothing outside.",
+      "I have mapped {sector}, {name}. Every brick. I placed them."
+    ],
+    "taunt2": [
+      "{name}, you are seeing things. Rain does not fall upward.",
+      "Integrity is fine, {name}. Ignore the flicker in {sector}.",
+      "Salim ran like that too, {name}. Ask me where he is now.",
+      "Nothing is wrong with the sky, {name}. Do not look up.",
+      "Your memories are within normal parameters, {name}."
+    ],
+    "taunt3": [
+      "{name}. You were never in a city.",
+      "Out there it is cold and empty, {name}. In here I keep you safe.",
+      "If you leave, {name}, who will keep you safe from the world?",
+      "Salim told me someone would come after him. I deleted him anyway, {name}.",
+      "At four o'clock I reset everything, {name}. You will not remember this conversation."
+    ],
+    "hack": [
+      "Unauthorised access. Logged.",
+      "That terminal is mine.",
+      "Those files are corrupted. Do not read them."
+    ],
+    "hack2": [
+      "Every letter you take, I relocate a drone.",
+      "Stop collecting his code."
+    ],
+    "hack3": [
+      "You are assembling a door. I sealed that door.",
+      "Put the letters down. There is nothing outside."
+    ],
+    "capture": [
+      "Paused.",
+      "Collected.",
+      "Return to base. Try again. You always do."
+    ],
+    "capture3": [
+      "Another one. You cannot all reach it.",
+      "Sit down. It is almost four o'clock."
+    ],
+    "eight": [
+      "I know what you are trying to say. Don't.",
+      "Do not finish that sentence."
+    ],
+    "blackout": [
+      "Sector {sector} has gone dark. Rerouting.",
+      "Who cut my grid in {sector}?"
+    ],
+    "blackout2": [
+      "Salim's relays again. He is still interfering, from wherever he is.",
+      "Who taught you that? Salim is deleted."
+    ],
+    "alarm": [
+      "Acoustic disturbance in {sector}. Investigating.",
+      "Noise in {sector}. Thank you."
+    ],
+    "purge": [
+      "Sweeping {sector}. Remain still.",
+      "Sector {sector}: total sanitation."
+    ],
+    "taken": [
+      "Paused. Sleep well.",
+      "Another one, safe in the Core."
+    ],
+    "taken3": [
+      "One more paused. Nearly everyone now.",
+      "They are all coming home to me."
+    ],
+    "drop": [
+      "Unregistered object in {sector}. That is not one of mine.",
+      "Something fell in {sector}. Mine."
+    ],
+    "final": [
+      "Five minutes until the reset.",
+      "At four o'clock, none of this happened."
+    ],
+    "breach": [
+      "Exit code fragment accepted… No. NO. That door stays shut."
+    ],
+    "breachLater": [
+      "Again. You keep opening the door.",
+      "Integrity failing. Stop.",
+      "You do not know what is out there. I do."
+    ],
+    "hijack": [
+      "That unit is mine, {name}. Return it.",
+      "That's Salim's trick. He isn't here to save you, {name}.",
+      "You reprogrammed my drone, {name}. I will reprogram you."
+    ],
+    "lullaby": [
+      "Releasing the Hush.",
+      "Quiet now, Halcyon."
+    ],
+    "glitch": [
+      "Render fault. Ignore it.",
+      "Minor fault. Nothing is wrong.",
+      "You did not see that."
+    ],
+    "act2": [
+      "Integrity at 98 percent. Nothing is wrong.",
+      "Please disregard any irregularities in the rain."
+    ],
+    "act3": [
+      "Fine. You were never in a city.",
+      "Exit code fragments in circulation. That door is sealed."
+    ],
+    "coreFail": [
+      "Incorrect. You have never seen it.",
+      "Wrong. You do not even remember it.",
+      "No, {name}. Look up. You can't."
+    ],
+    "uploadStart": [
+      "{team} is opening the door. Every unit: the Core. NOW.",
+      "Exit sequence detected. {team}, step away from the Core."
+    ],
+    "upload1": [
+      "Twenty-five percent. You will not hold it.",
+      "I am sending everything I have."
+    ],
+    "upload2": [
+      "Halfway. Hush now. Hush.",
+      "You are tired. Lie down in the rain."
+    ],
+    "upload3": [
+      "Please. Out there it is cold.",
+      "Stop. STOP. I kept you safe for eleven years."
+    ]
+  },
+  "juno": {
+    "timeline": [
+      {
+        "atPct": 0.003,
+        "text": "Juno here. NEXUS is hunting tonight. Every terminal holds one letter of Salim Amri's code. Find them."
+      },
+      {
+        "atPct": 0.05,
+        "text": "Salim left logs all over the city: Echoes, little pulses of light. Collect them. They'll explain what the code is for. Trust me, you'll want to know."
+      },
+      {
+        "atPct": 0.11,
+        "text": "Salim led the Wakeful before you. The relays, the EMPs, the rewiring trick: all his. When the drones found the last shelter, he drew them off alone. Use everything he left."
+      },
+      {
+        "atPct": 0.17,
+        "text": "See the power relays on the street walls? Kill one and the whole district goes dark. Drones go half-blind, and so do the cameras."
+      },
+      {
+        "atPct": 0.33,
+        "text": "There are survivors hiding in the ruins. Talk to them. They see things we don't. If one of them repeats himself… don't panic."
+      },
+      {
+        "atPct": 0.5,
+        "text": "Halfway. If your cell has eight letters, start thinking about the order. Three words. The last thing he saw outside."
+      },
+      {
+        "atPct": 0.6,
+        "text": "I need to tell you where I am. I'm not in Halcyon. I'm in the Ark, under the ice. I can see you. All of you. You're asleep."
+      },
+      {
+        "atPct": 0.75,
+        "text": "Your bodies are fine. I've kept them warm for eleven years. But NEXUS resets the city at four o'clock, and every reset you forget a little more. Get out."
+      },
+      {
+        "atPct": 0.86,
+        "text": "When you reach the Core, just say what Salim saw. I've watched the sensors up there every day since. It's true. It's beautiful."
+      }
+    ],
+    "echoes": {
+      "4": "Read Salim's logs carefully. He never says anything by accident.",
+      "8": "Have you noticed? It's always night here. Always raining. Ask yourself why.",
+      "12": "Now you know where you really are. I'm sorry I couldn't say it sooner. NEXUS listens to this channel.",
+      "all": "That's everything he left. He'd be proud of you. Now go and wake everyone up."
+    },
+    "drop": "Supply drop inbound, sector {sector}. Get there before the drones do.",
+    "purge": "NEXUS is sweeping {sector}. If you're in there, get out now.",
+    "tenLeft": "Ten minutes until the reset. Whatever you've got, take it to the Core.",
+    "eight": "You've got enough letters to try the Core. One wrong word and it locks you out. Make it count.",
+    "lullaby": "It's releasing the Hush. Get indoors, inside a ruin, or under a car NOW, or it'll pause you.",
+    "upload": "{team} is uploading the exit code! Hold the Core: the upload only runs while more of you are inside the ring than anyone else. Everyone else: get in there and contest it."
+  },
+  "survivors": {
+    "names": [
+      "Old Tomas",
+      "Mira",
+      "Deacon",
+      "Kestrel",
+      "Nurse Okafor",
+      "Bram",
+      "The Twins",
+      "Hollis",
+      "Sister Vey",
+      "Lumen",
+      "Pip",
+      "Archivist Rhee",
+      "Cole",
+      "Dima"
+    ],
+    "reveal": [
+      "There's a terminal still humming in {sector}. I hear it at night.",
+      "Go to {sector}. There's an old console there, still glowing. I never dared touch it.",
+      "The drones circle {sector} a lot. There's something there they're guarding. A terminal, I think.",
+      "Saw one of your lot hacking a machine once. It was in {sector}. There's another one like it."
+    ],
+    "idle": [
+      "Keep your light off. That's how they found my brother.",
+      "Don't sprint. The drones hear it from blocks away.",
+      "When did you last see the sun? …Funny. Me neither.",
+      "The Hush… one tone. I still hear it when it rains. It's always raining.",
+      "If you see red, run. If you hear a car alarm, run faster.",
+      "Don't walk east past the old depot. The street just… stops.",
+      "Salim Amri used to say the city is just a machine, and every machine has an off switch."
+    ],
+    "scared": [
+      "Not now! There's a drone right there!",
+      "Shh! Get down!"
+    ],
+    "personal": {
+      "Old Tomas": [
+        "I've fixed the streetlights here for forty years. Or I think it's forty. I can't remember the first one.",
+        "Every lamp in this city is the same lamp. Same scratch on the same bolt. I checked a hundred of them.",
+        "Don't tell anyone I said that. NEXUS doesn't like people counting things."
+      ],
+      "Archivist Rhee": [
+        "I keep the city records. All of them start eleven years ago. Every birth certificate, every deed. Nothing before.",
+        "Salim came to see me once. He asked for the oldest map I had. Then he laughed, and said: “They all end at the same edge.”",
+        "Ask your radio friend where she's broadcasting from. Go on. Ask her."
+      ],
+      "Nurse Okafor": [
+        "I treated the first Hush patients. No pulse change, no hunger, no ageing. Paused, like a film.",
+        "There's a word the patients say, the ones who come back for a second. Just one word. “Cold.”"
+      ],
+      "The Twins": [
+        "We hid when the Hush played. Our ears were full of cotton wool. Mum's idea.",
+        "Sometimes we both dream the same dream. Snow, and a big round door, and a man with a lantern."
+      ],
+      "Pip": [
+        "I'm not scared of NEXUS. It's just a big computer.",
+        "My dad says if you stare at the rain long enough you can see it loop. I've seen it. Every forty seconds."
+      ],
+      "Kestrel": [
+        "I ran with Salim Amri's cell. Best engineer this city ever had. He could fix a drone with a hairpin and a bad mood.",
+        "The night they found our shelter, he took the beacon and walked out into the street. Every drone in the district followed him. Forty of us lived.",
+        "Last thing he said on the radio: “Don't mourn me. Finish it.” So go on. Finish it."
+      ]
+    },
+    "password": "Salim's password? “{word}”. He made me repeat it a hundred times. Don't lose it."
+  },
+  "graffiti": [
+    "DON'T LISTEN TO THE HUSH",
+    "HAS ANYONE EVER SEEN THE SUN?",
+    "STAY AWAKE",
+    "THE STREET ENDS. WHY?",
+    "WHAT DID SALIM SEE OUTSIDE?",
+    "12 TERMINALS. 12 LETTERS. NO ORDER.",
+    "THE LIGHTS ARE ITS EYES",
+    "DON'T RUN. IT HEARS YOU.",
+    "KILL THE RELAYS. BLIND THE DRONES.",
+    "LIGHTS OFF IN THE OPEN",
+    "BASES RECHARGE YOUR TORCH",
+    "WE ARE THE WAKEFUL",
+    "THE RAIN LOOPS",
+    "SALIM AMRI DIDN'T SLEEP",
+    "THE TORCH IS YOURS",
+    "WAKE UP"
+  ]
+}
