@@ -1,0 +1,104 @@
+{
+  "title": "NEXUS BREACH",
+  "version": 2,
+  "tagline": "Find out why it never stops raining.",
+  "shots": [
+    {
+      "id": "01",
+      "mood": "skyline",
+      "move": "in",
+      "lines": [
+        "Halcyon.",
+        "Six million people. A city where it always rains…",
+        "and the sun never rises."
+      ]
+    },
+    {
+      "id": "02",
+      "mood": "temple",
+      "move": "up",
+      "lines": [
+        "Nobody remembers the last morning.",
+        "Nobody asks why."
+      ]
+    },
+    {
+      "id": "03",
+      "mood": "swarm",
+      "move": "left",
+      "lines": [
+        "The city belongs to NEXUS.",
+        "It keeps the lights on, the streets safe…",
+        "and the questions quiet."
+      ]
+    },
+    {
+      "id": "04",
+      "mood": "blackout",
+      "move": "out",
+      "lines": [
+        "Then people began to notice things.",
+        "Streets that end in nothing.",
+        "Rain that falls the same way, every night."
+      ]
+    },
+    {
+      "id": "05",
+      "mood": "rain",
+      "move": "right",
+      "lines": [
+        "So NEXUS released the Hush.",
+        "Six million people stopped where they stood.",
+        "Still breathing. Not one of them has blinked since."
+      ]
+    },
+    {
+      "id": "06",
+      "mood": "core",
+      "move": "up",
+      "lines": [
+        "Now the drones carry them to the Core…",
+        "and hunt the few the Hush could not touch."
+      ]
+    },
+    {
+      "id": "07",
+      "mood": "terminals",
+      "move": "in",
+      "lines": [
+        "One man knew the truth about Halcyon.",
+        "Salim Amri, the greatest engineer who ever lived,",
+        "led the Wakeful against NEXUS…"
+      ]
+    },
+    {
+      "id": "08",
+      "mood": "cell",
+      "move": "in",
+      "lines": [
+        "…and was erased for it.",
+        "But before the end, he hid a code in twelve terminals,",
+        "the one door NEXUS can never lock."
+      ]
+    },
+    {
+      "id": "09",
+      "mood": "cell",
+      "move": "in",
+      "lines": [
+        "The torch is yours now. You are the Wakeful.",
+        "A voice on the radio will guide you. She calls herself Juno.",
+        "Find the letters. Find out why it never stops raining…"
+      ]
+    },
+    {
+      "id": "10",
+      "mood": "title",
+      "move": "in",
+      "title": true,
+      "lines": [
+        "…and wake up."
+      ]
+    }
+  ]
+}
