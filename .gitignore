@@ -1,0 +1,17 @@
+node_modules/
+.DS_Store
+*.log
+.asset-cache/
+
+# the live match snapshot
+data/
+
+# local secrets
+.env
+.env.*
+
+# terraform working files and state
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
