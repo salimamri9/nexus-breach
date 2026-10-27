@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Nexus Breach · Host</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 fill=%22%2305060d%22/%3E%3Ccircle cx=%2216%22 cy=%2216%22 r=%229%22 fill=%22none%22 stroke=%22%23ff2bd6%22 stroke-width=%223%22/%3E%3Ccircle cx=%2216%22 cy=%2216%22 r=%223%22 fill=%22%2322e1ff%22/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    html, body { height: auto; overflow: auto; touch-action: auto; user-select: text; -webkit-user-select: text; }
+    main { max-width: 1100px; margin: 0 auto; padding: 24px 16px 60px; }
+    h1 { font-family: var(--display); font-size: 22px; letter-spacing: 0.1em; color: #fff; margin: 0 0 4px; }
+    h2 { font-size: 11px; letter-spacing: 0.25em; color: var(--cyan); font-weight: normal; margin: 26px 0 10px; text-transform: uppercase; }
+    .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .box { background: rgba(255,255,255,0.03); border: 1px solid var(--line); padding: 14px; }
+    button.b { background: rgba(34,225,255,0.1); border: 1px solid var(--cyan); color: var(--cyan); padding: 9px 14px; letter-spacing: 0.08em; }
+    button.b:hover { background: rgba(34,225,255,0.2); }
+    button.b.go { background: var(--green); color: #021; border-color: var(--green); font-weight: bold; }
+    button.b.danger { border-color: var(--red); color: var(--red); background: rgba(255,42,74,0.08); }
+    input.i, select.i { background: #0a0d18; border: 1px solid var(--line); color: #fff; padding: 8px 10px; font-size: 14px; }
+    input.i[type=number] { width: 80px; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th { text-align: left; font-weight: normal; color: var(--dim); font-size: 11px; letter-spacing: 0.12em; padding: 6px 8px; border-bottom: 1px solid var(--line); }
+    td { padding: 6px 8px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .big { font-family: var(--display); font-size: 34px; font-weight: 900; color: #fff; }
+    .muted { color: var(--dim); font-size: 12px; }
+    .off { opacity: 0.4; }
+    .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 12px; }
+    #login { max-width: 360px; margin: 18vh auto; }
+    .spoiler { filter: blur(5px); cursor: pointer; } .spoiler:hover { filter: none; }
+    .msg { min-height: 18px; color: var(--amber); font-size: 12px; margin-top: 6px; }
+  </style>
+</head>
+<body>
+  <form id="login" class="box">
+    <h1>HOST CONSOLE</h1>
+    <p class="muted">Enter the admin password (set with the ADMIN_PASSWORD env var).</p>
+    <div class="row"><input class="i" id="pw" type="password" autocomplete="current-password" aria-label="Admin password" style="flex:1"><button class="b go">Log in</button></div>
+    <div class="msg" id="login-msg"></div>
+  </form>
+
+  <main id="dash" class="hidden">
+    <h1>NEXUS BREACH · HOST CONSOLE</h1>
+    <div class="muted">Big screen: <a href="/screen" target="_blank" style="color:var(--cyan)">/screen</a> · Players: <a href="/" target="_blank" style="color:var(--cyan)">/</a></div>
+
+    <div class="grid2" style="margin-top:18px">
+      <div class="box">
+        <div class="muted" id="phase">—</div>
+        <div class="big" id="timer">--:--</div>
+        <div class="muted" id="counts"></div>
+      </div>
+      <div class="box">
+        <div class="row">
+          <label class="muted" for="minutes">Minutes</label><input class="i" type="number" id="minutes" min="1" max="180" value="30">
+          <button class="b go" data-cmd="start">Start hunt</button>
+          <button class="b" data-cmd="addTime">Add 5 min</button>
+          <button class="b danger" data-cmd="end">End now</button>
+        </div>
+        <div class="row" style="margin-top:10px">
+          <button class="b danger" data-cmd="reset">Reset (same map)</button>
+          <button class="b danger" data-cmd="resetNew">Reset with new map</button>
+        </div>
+        <div class="msg" id="cmd-msg"></div>
+      </div>
+    </div>
+
+    <h2>Prologue cinematic</h2>
+    <div class="row">
+      <button class="b" id="pro-screen">Play on big screen</button>
+      <button class="b" id="pro-all">Play on big screen + every player</button>
+      <span class="muted">On the big screen, click the page once beforehand so the browser allows sound.</span>
+    </div>
+
+    <h2>Live events</h2>
+    <div class="row">
+      <button class="b" id="ev-drop">Supply drop now</button>
+      <button class="b" id="ev-purge">Purge sweep now</button>
+      <button class="b" id="ev-lullaby">The Hush in 12s</button>
+      <form class="row" id="nx" style="flex:1"><input class="i" id="nx-text" maxlength="160" style="flex:1" placeholder="Make NEXUS say something…" aria-label="NEXUS line"><button class="b">NEXUS speaks</button></form>
+    </div>
+
+    <div class="grid2">
+      <div>
+        <h2>Broadcast</h2>
+        <form class="row" id="bc"><input class="i" id="bc-text" maxlength="160" style="flex:1" aria-label="Broadcast message"><button class="b">Send to everyone</button></form>
+      </div>
+      <div>
+        <h2>Drones</h2>
+        <div class="row">
+          <button class="b" id="sent-toggle">—</button>
+          <label class="muted" for="sent-count">Count</label><input class="i" type="number" id="sent-count" min="0" max="60">
+          <button class="b" id="sent-apply">Respawn drones</button>
+        </div>
+      </div>
+    </div>
+
+    <h2>Squads <button class="b" id="squad-new" style="padding:3px 10px;margin-left:10px">+ New squad</button> <span class="muted" id="squad-msg"></span></h2>
+    <div class="box"><table><thead><tr><th>Squad · code · size · puzzle set</th><th>Score</th><th>Fragments</th><th>Breach</th><th>Caught</th><th>Adjust</th><th>Squad</th></tr></thead><tbody id="t-teams"></tbody></table></div>
+
+    <h2>Terminals <span class="muted">(hover to reveal answers)</span></h2>
+    <div class="box"><table><thead><tr><th>#</th><th>Name</th><th>Sector</th><th>Answer</th><th>Cracked by</th></tr></thead><tbody id="t-terms"></tbody></table>
+      <div class="muted" style="margin-top:8px">Passphrase: <span class="spoiler" id="pass"></span></div></div>
+
+    <h2>Players <span class="muted" id="pcount"></span></h2>
+    <div class="box"><table><thead><tr><th>Name</th><th>Team</th><th>Class</th><th>Sector</th><th>Score</th><th>Hacks</th><th>Caught</th><th></th></tr></thead><tbody id="t-players"></tbody></table></div>
+  </main>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const $ = (s) => document.querySelector(s);
+    const socket = io();
+    let state = null, offset = 0, teamNames = [];
+    const fmt = (ms) => { const s = Math.max(0, Math.ceil(ms / 1000)); return String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0'); };
+    const td = (text, color) => { const e = document.createElement('td'); e.textContent = text; if (color) e.style.color = color; return e; };
+
+    function auth(pw) {
+      socket.emit('admin:auth', { password: pw }, (res) => {
+        if (!res.ok) { $('#login-msg').textContent = 'Wrong password.'; return; }
+        sessionStorage.setItem('nexus_admin', pw);
+        $('#login').classList.add('hidden');
+        $('#dash').classList.remove('hidden');
+        $('#minutes').value = res.config.durationMinutes;
+        $('#sent-count').value = res.config.sentinels;
+      });
+    }
+    $('#login').addEventListener('submit', (e) => { e.preventDefault(); auth($('#pw').value); });
+    socket.on('connect', () => { const pw = sessionStorage.getItem('nexus_admin'); if (pw) auth(pw); });
+
+    document.getElementById('squad-new').onclick = () => {
+      const open = confirm('Let solo players fill the empty seats?\n\nOK = open to anyone · Cancel = only people with the code');
+      socket.emit('admin:cmd', { cmd: 'squadNew', args: { open } }, (r) => { $('#squad-msg').textContent = r.ok ? `New squad ${r.name}: code ${r.code}` : `✗ ${r.error}`; });
+    };
+    function cmd(c, args = {}) {
+      socket.emit('admin:cmd', { cmd: c, args }, (r) => { $('#cmd-msg').textContent = r.ok ? `✓ ${c}` : `✗ ${r.error}`; });
+    }
+    document.querySelectorAll('[data-cmd]').forEach((b) => b.addEventListener('click', () => {
+      const c = b.dataset.cmd;
+      if (c === 'start') cmd('start', { minutes: +$('#minutes').value });
+      else if (c === 'addTime') cmd('addTime', { minutes: 5 });
+      else if (c === 'end') { if (confirm('End the hunt now?')) cmd('end'); }
+      else if (c === 'reset') { if (confirm('Reset all scores and progress (same map)?')) cmd('reset', {}); }
+      else if (c === 'resetNew') { if (confirm('Reset everything and generate a brand-new city?')) cmd('reset', { newMap: true }); }
+    }));
+    $('#bc').addEventListener('submit', (e) => { e.preventDefault(); const t = $('#bc-text').value.trim(); if (t) { cmd('broadcast', { text: t }); $('#bc-text').value = ''; } });
+    $('#ev-drop').addEventListener('click', () => cmd('drop'));
+    $('#ev-purge').addEventListener('click', () => cmd('purge'));
+    $('#ev-lullaby').addEventListener('click', () => cmd('lullaby'));
+    $('#nx').addEventListener('submit', (e) => { e.preventDefault(); const t = $('#nx-text').value.trim(); if (t) { cmd('nexus', { text: t }); $('#nx-text').value = ''; } });
+    $('#pro-screen').addEventListener('click', () => cmd('prologue', { target: 'screen' }));
+    $('#pro-all').addEventListener('click', () => { if (confirm('Play the prologue on every player screen now?')) cmd('prologue', { target: 'all' }); });
+    $('#sent-toggle').addEventListener('click', () => cmd('sentinels', { enabled: !state.sentinelsEnabled }));
+    $('#sent-apply').addEventListener('click', () => cmd('sentinels', { count: +$('#sent-count').value }));
+
+    socket.on('admin:state', (s) => {
+      state = s;
+      offset = s.phase.serverNow - Date.now();
+      $('#phase').textContent = s.phase.phase.toUpperCase() + ` · map seed ${s.seed}`;
+      const online = s.players.filter((p) => p.connected).length;
+      $('#counts').textContent = `${online} online · ${s.players.length} total · ${s.teams.filter((t) => t.active && t.size).length} squads`;
+      $('#sent-toggle').textContent = s.sentinelsEnabled ? `Drones ON (${s.sentinels})` : 'Drones OFF';
+      $('#pass').textContent = s.passphrase;
+      $('#pcount').textContent = `(${online} online)`;
+      teamNames = s.teams.map((t) => t.name);
+
+      // don't rebuild the tables under an open dropdown (they refresh every second)
+      if (document.activeElement?.tagName === 'SELECT') return;
+      const tt = $('#t-teams'); tt.innerHTML = '';
+      // live squads, plus empty ones made in the last 10 minutes (so a new squad's code stays visible)
+      const shown = s.teams.filter((x) => x.active && (x.size || x.score || Date.now() + offset - x.createdAt < 600000));
+      for (const t of shown) {
+        const tr = document.createElement('tr');
+        tr.append(td(`${t.name} · ${t.code} · ${t.size}/4 · set ${t.variant + 1}${t.open ? ' · open' : ''}`, t.color), td(t.score), td(t.fragments.map((f) => f || '·').join(' ')), td(t.breachRank ? '#' + t.breachRank : '—'), td(t.caught));
+        const c = document.createElement('td');
+        for (const d of [-50, 50]) { const b = document.createElement('button'); b.className = 'b'; b.textContent = (d > 0 ? '+' : '') + d; b.style.padding = '3px 8px'; b.onclick = () => cmd('score', { team: t.id, delta: d }); c.append(b, ' '); }
+        tr.append(c);
+        const m = document.createElement('td');
+        const rn = document.createElement('button'); rn.className = 'b'; rn.textContent = 'Rename'; rn.style.padding = '3px 8px';
+        rn.onclick = () => { const n = prompt(`New name for ${t.name} (letters and digits, max 12):`, t.name); if (n) cmd('squadRename', { team: t.id, name: n }); };
+        const mg = document.createElement('select'); mg.className = 'i'; mg.style.padding = '3px';
+        mg.append(new Option('Merge into…', ''));
+        for (const o of shown) if (o.id !== t.id && o.size + t.size <= 4) mg.append(new Option(`${o.name} (${o.size}/4)`, o.id));
+        mg.onchange = () => {
+          const o = s.teams[+mg.value]; if (!o) return;
+          if (confirm(`Move all ${t.size} of ${t.name} into ${o.name}?\n\nThey take ${o.name}'s letters and progress; ${t.name}'s own progress stays with ${t.name}.`)) cmd('squadMerge', { from: t.id, to: o.id });
+          mg.value = '';
+        };
+        m.append(rn, ' ', mg); tr.append(m); tt.append(tr);
+      }
+      const tm = $('#t-terms'); tm.innerHTML = '';
+      for (const t of s.terminals) {
+        const tr = document.createElement('tr');
+        const ans = td(t.answer); ans.className = 'spoiler';
+        tr.append(td(t.id + 1), td(t.name), td(t.sector), ans, td(t.hackedBy.map((i) => s.teams[i].name).join(', ') || '—'));
+        tm.append(tr);
+      }
+      const tp = $('#t-players'); tp.innerHTML = '';
+      for (const p of [...s.players].sort((a, b) => b.score - a.score)) {
+        const tr = document.createElement('tr');
+        if (!p.connected) tr.className = 'off';
+        const sel = document.createElement('select'); sel.className = 'i'; sel.style.padding = '3px';
+        s.teams.filter((t) => t.active).forEach((t) => { const o = document.createElement('option'); o.value = t.id; o.textContent = t.name; if (t.id === p.team) o.selected = true; sel.append(o); });
+        sel.onchange = () => cmd('setTeam', { id: p.id, team: +sel.value });
+        const tteam = document.createElement('td'); tteam.append(sel);
+        const k = document.createElement('td'); const kb = document.createElement('button'); kb.className = 'b danger'; kb.textContent = 'Kick'; kb.style.padding = '3px 8px';
+        kb.onclick = () => { if (confirm(`Kick ${p.name}?`)) cmd('kick', { id: p.id }); }; k.append(kb);
+        tr.append(td(p.name), tteam, td(p.cls), td(p.sector), td(p.score), td(p.hacks), td(p.caught), k);
+        tp.append(tr);
+      }
+    });
+
+    setInterval(() => {
+      if (!state) return;
+      const now = Date.now() + offset, ph = state.phase;
+      $('#timer').textContent = ph.phase === 'playing' ? fmt(ph.endsAt - now) : ph.phase === 'countdown' ? fmt(ph.startAt - now) : ph.phase === 'ended' ? 'OVER' : 'LOBBY';
+    }, 250);
+  </script>
+</body>
+</html>
