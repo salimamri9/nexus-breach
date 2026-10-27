@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+  <meta name="theme-color" content="#05060d">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Nexus Breach 2D</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 fill=%22%2305060d%22/%3E%3Ccircle cx=%2216%22 cy=%2216%22 r=%229%22 fill=%22none%22 stroke=%22%23ff2bd6%22 stroke-width=%223%22/%3E%3Ccircle cx=%2216%22 cy=%2216%22 r=%223%22 fill=%22%2322e1ff%22/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Cinzel:wght@700&family=Cormorant+Garamond:ital,wght@1,500&family=Share+Tech+Mono&family=Permanent+Marker&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <script type="importmap">
+    { "imports": { "three": "/vendor/three/build/three.module.js", "three/addons/": "/vendor/three/examples/jsm/" } }
+  </script>
+</head>
+<body>
+  <canvas id="game"></canvas>
+  <div id="alert-overlay"></div>
+  <div id="glitch-overlay"></div>
+  <div id="fps"></div>
+  <div id="click-to-look" class="hidden">Click to look around · Esc to release the mouse</div>
+
+  <div id="hud" class="hidden">
+    <div id="hud-tl" class="hud-panel">
+      <div class="team-row"><span class="team-chip"></span><span id="team-name"></span></div>
+      <div id="squad-info" title="Friends join your squad with this code"></div>
+      <div class="score-row"><span class="label">SCORE</span><span id="team-score">0</span></div>
+      <div class="label">PASSPHRASE FRAGMENTS</div>
+      <div id="passslots"></div>
+      <div id="core-status"></div>
+    </div>
+
+    <div id="hud-tc">
+      <div id="phase-label">STANDBY</div>
+      <div id="timer">--:--</div>
+    </div>
+
+    <div id="hud-tr">
+      <div id="minimap-wrap" title="Open map (M)"><canvas id="minimap"></canvas><div id="sector-label"></div></div>
+      <div id="toolbar">
+        <button data-act="intel" title="Intel (I)">INTEL</button>
+        <button data-act="scores" title="Rankings (Tab)">RANK</button>
+        <button data-act="chat" title="Chat (Enter)">CHAT</button>
+        <button data-act="help" title="Field manual (H)">HELP</button>
+        <button data-act="mute" id="btn-mute" title="Toggle sound">SND</button>
+      </div>
+    </div>
+
+    <div id="feed"></div>
+
+    <div id="chatbox">
+      <div id="chat-log"></div>
+      <form id="chat-form" class="hidden">
+        <button type="button" id="chat-scope">TEAM</button>
+        <input id="chat-input" maxlength="140" autocomplete="off" aria-label="Chat message">
+      </form>
+    </div>
+
+    <div id="interact-prompt" class="hidden"></div>
+
+    <div id="ability">
+      <button id="btn-ability" aria-label="Use ability">
+        <svg viewBox="0 0 100 100" aria-hidden="true"><circle class="bg" cx="50" cy="50" r="45"/><circle class="cd" cx="50" cy="50" r="45"/></svg>
+        <span class="ab-name"></span>
+        <span class="ab-key">SPACE</span>
+      </button>
+    </div>
+    <button id="btn-act" class="hidden">HACK</button>
+    <div id="touch-buttons">
+      <button id="btn-sprint" aria-label="Sprint">RUN</button>
+      <button id="btn-crouch" aria-label="Crouch">CROUCH</button>
+      <button id="btn-light" aria-label="Flashlight">LIGHT</button>
+    </div>
+    <div id="joystick-zone"></div>
+    <div id="look-zone"></div>
+    <div id="joystick"><div class="knob"></div></div>
+    <div id="hint-toast"></div>
+    <div id="vitals">
+      <div class="vital" id="v-stamina"><div class="lbl"><span>STAMINA</span><span class="v"></span></div><div class="bar"><div class="fill"></div></div></div>
+      <div class="vital" id="v-battery"><div class="lbl"><span>BATTERY</span><span class="v"></span></div><div class="bar"><div class="fill"></div></div></div>
+    </div>
+    <div id="status-line"></div>
+    <div id="hold-ring" class="hidden"></div>
+  </div>
+
+  <div id="announce"></div>
+  <div id="countdown"></div>
+
+  <div id="panel-intel" class="panel hidden">
+    <div class="panel-head">RESISTANCE INTEL <button class="close" aria-label="Close">✕</button></div>
+    <div class="panel-body">
+      <h3>Terminals located</h3>
+      <div id="intel-terminals"></div>
+      <h3>Messages found</h3>
+      <div id="intel-messages"></div>
+      <div id="echo-log"></div>
+    </div>
+  </div>
+
+  <div id="panel-scores" class="panel hidden">
+    <div class="panel-head">CITY RANKINGS <button class="close" aria-label="Close">✕</button></div>
+    <div class="panel-body" id="scores-body"></div>
+  </div>
+
+  <div id="panel-help" class="panel hidden">
+    <div class="panel-head">FIELD MANUAL <button class="close" aria-label="Close">✕</button></div>
+    <div class="help-tabs" role="tablist">
+      <button type="button" data-tab="controls" class="on">Controls</button>
+      <button type="button" data-tab="goal">How to win</button>
+      <button type="button" data-tab="puzzles">Terminals</button>
+      <button type="button" data-tab="stealth">Staying alive</button>
+      <button type="button" data-tab="tools">Tricks</button>
+    </div>
+    <div class="panel-body help-body">
+      <section data-tab="controls">
+        <table class="help-keys">
+          <tr><td><kbd>W</kbd> <kbd>↑</kbd></td><td>Walk toward your mouse (where your flashlight points)</td></tr>
+          <tr><td><kbd>S</kbd> <kbd>↓</kbd></td><td>Back away from the mouse</td></tr>
+          <tr><td><kbd>A</kbd> <kbd>D</kbd> <kbd>←</kbd> <kbd>→</kbd></td><td>Sidestep</td></tr>
+          <tr><td><kbd>Mouse</kbd></td><td>Aim your body and flashlight</td></tr>
+          <tr><td><kbd>Shift</kbd></td><td>Sprint (uses stamina, and drones <b>hear</b> it)</td></tr>
+          <tr><td><kbd>C</kbd></td><td>Crouch on / off: slow and silent</td></tr>
+          <tr><td><kbd>F</kbd></td><td>Flashlight on / off</td></tr>
+          <tr><td><kbd>E</kbd></td><td>Use: hack a terminal, talk, listen to an echo, hide under a car. <b>Hold</b> it behind a drone to rewire it</td></tr>
+          <tr><td><kbd>Left click</kbd></td><td>Throw a bottle (a noise that lures drones)</td></tr>
+          <tr><td><kbd>Right click</kbd> / <kbd>G</kbd></td><td>Ping a spot for your squad</td></tr>
+          <tr><td><kbd>Space</kbd> / <kbd>Q</kbd></td><td>Your class ability</td></tr>
+          <tr><td><kbd>M</kbd></td><td>City map</td></tr>
+          <tr><td><kbd>I</kbd></td><td>Intel: terminals found, clues, echoes</td></tr>
+          <tr><td><kbd>Tab</kbd> (hold)</td><td>Rankings</td></tr>
+          <tr><td><kbd>Enter</kbd> / <kbd>T</kbd> · <kbd>Y</kbd></td><td>Team chat · chat to everyone</td></tr>
+          <tr><td><kbd>Wheel</kbd> <kbd>+</kbd> <kbd>−</kbd></td><td>Zoom</td></tr>
+          <tr><td><kbd>Esc</kbd></td><td>Close any window</td></tr>
+          <tr><td><kbd>H</kbd></td><td>This manual</td></tr>
+        </table>
+      </section>
+      <section data-tab="goal" hidden>
+        <ol>
+          <li><b>Crack terminals.</b> There are 12. Each gives your squad <b>one letter</b> of the passphrase, scrambled.</li>
+          <li><b>Reach the Nexus Core</b> in the centre with <b>at least 8 letters</b> and enter the phrase. A wrong guess locks your squad out of the Core for <b>45 s</b>.</li>
+          <li><b>Hold the ring.</b> The right phrase starts an upload: <b>90 s with all 12 letters, +15 s for every letter you're missing</b> (150 s with 8). Cracking more terminals during the upload speeds it up.</li>
+          <li>It only runs while <b>more of your squad</b> stands inside the 14 m ring than <b>any single rival squad</b>. Tied or outnumbered: it pauses. Nobody inside: it pauses. Progress is never lost.</li>
+          <li>NEXUS fights back: a purge on the Core, drone waves every 6 s, more at 25 / 50 / 75 %, and the Hush at 50 %.</li>
+          <li><b>The first finished upload wins and ends the game.</b> Everyone else is ranked by points. If time runs out, the highest score wins.</li>
+        </ol>
+        <h3>Points</h3>
+        <table class="help-keys">
+          <tr><td>Crack a terminal</td><td>+100 (first squad to crack it: +50 more)</td></tr>
+          <tr><td>Finish the upload</td><td>+1000</td></tr>
+          <tr><td>Supply drop</td><td>+75</td></tr>
+          <tr><td>New echo</td><td>+5</td></tr>
+          <tr><td>Supply cache</td><td>+2 (max 40 per squad)</td></tr>
+          <tr><td>Hint</td><td>−60 (free for Hackers)</td></tr>
+          <tr><td>Caught by a drone</td><td>−40</td></tr>
+        </table>
+      </section>
+      <section data-tab="puzzles" hidden>
+        <p>Walk up to a terminal and press <kbd>E</kbd>. The screen rarely holds the answer. The city does.</p>
+        <ul>
+          <li>Read every wall, listen to every echo, talk to whoever is still awake.</li>
+          <li>Keep your eyes open when the city glitches.</li>
+          <li>Some terminals need more than one of you. A squad of one gets a solo version (and more time).</li>
+          <li>Everything you find is kept under <kbd>I</kbd>.</li>
+        </ul>
+        <h3>Rules</h3>
+        <table class="help-keys">
+          <tr><td>Finding one</td><td>Terminals within 12 m appear on your squad's map</td></tr>
+          <tr><td>Wrong answer</td><td>You're locked out of that terminal for 3 s, then 6, 12, 24, up to 48 s (half for Hackers)</td></tr>
+          <tr><td>Hint</td><td>−60 points for your squad (free for Hackers)</td></tr>
+          <tr><td>Cracking one</td><td>Loud: drones within 50 m come to look</td></tr>
+          <tr><td>Answers</td><td>Capitals, spaces and punctuation don't matter</td></tr>
+        </table>
+      </section>
+      <section data-tab="stealth" hidden>
+        <h3>Drones</h3>
+        <table class="help-keys">
+          <tr><td>Patrol / chase speed</td><td>3.2 m/s / 6.6 m/s (faster than jogging, slower than sprinting)</td></tr>
+          <tr><td>Sight</td><td>22 m in their searchlight cone, 3 m all around. Walls block it</td></tr>
+          <tr><td>Seen from less far</td><td>Standing still: half · crouched: −40 % · flashlight off: −20 % · in a blackout: −45 %</td></tr>
+          <tr><td>Seen from further</td><td>Flashlight on: +25 % · caught in the Hush: +30 %</td></tr>
+          <tr><td>Hearing</td><td>Sprinting 20 m · jogging 6 m (Runners: silent) · crouching silent · bottle 22 m · car alarm 40 m · cracked terminal 50 m</td></tr>
+          <tr><td>Chase</td><td>A drone that sees you calls every idle drone within 60 m. It gives up 3.5 s after losing sight of you</td></tr>
+          <tr><td>Safe from drones</td><td>Inside any base · hidden under a car · 6 s after a respawn · near your squad's rewired drone</td></tr>
+          <tr><td>Caught (1.5 m)</td><td>Back to your base, stunned 3.5 s, −40 % battery, −40 points</td></tr>
+        </table>
+        <h3>Cameras</h3>
+        <p>Wall cameras sweep a cone. If one sees you, drones within 60 m come running. Crouched and still, they can't see you. <kbd>E</kbd> on a camera switches it off for 60 s.</p>
+        <h3>You</h3>
+        <table class="help-keys">
+          <tr><td>Stamina</td><td>Drains only while sprinting. Refilling starts 1.5 s after you stop, 1.5× faster standing still (times per class). Run it <b>completely dry</b> and you're <b>winded</b>: no sprinting until it's back to 40 %</td></tr>
+          <tr><td>Flashlight</td><td>Drains while on, outside your base. Your own base refills it in 8 s. Supply caches +25 %</td></tr>
+          <tr><td>The Hush</td><td>12 s warning, lasts 18 s. Get indoors, into your base or under a car, or move at 55 % speed and be seen 30 % further</td></tr>
+          <tr><td>Purge</td><td>NEXUS sweeps a 30 m zone for 45 s with 10 drones. Leave it</td></tr>
+        </table>
+      </section>
+      <section data-tab="tools" hidden>
+        <table class="help-keys">
+          <tr><td>Bottles (left click)</td><td>Throw up to 18 m. Drones within 22 m go to check the noise. Start with 3, carry up to 5</td></tr>
+          <tr><td>Rewire a drone (hold <kbd>E</kbd>)</td><td>From behind (Engineers: any side), on a drone that isn't chasing. It escorts your squad for 25 s (Engineers 40 s). Kit recharges in 60 s (Engineers 30 s)</td></tr>
+          <tr><td>Power relays (<kbd>E</kbd>)</td><td>Yellow wall boxes. Black out the district for 75 s: drones see 45 % less, cameras go blind. Noisy (30 m). 4 min before it can be cut again</td></tr>
+          <tr><td>Hide (<kbd>E</kbd>)</td><td>Under tarp-covered cars. Invisible until you move. Counts as shelter from the Hush</td></tr>
+          <tr><td>Car alarms</td><td>Sprinting next to an alarmed car sets it off for 12 s (40 m of noise)</td></tr>
+          <tr><td>Supply caches</td><td>Yellow cases: +25 % battery, sometimes a bottle. Respawn after 75 s</td></tr>
+          <tr><td>Supply drop</td><td>Announced by Juno, lands 20 s later, stays 100 s. First to grab it: +75 points, full battery and stamina, a terminal revealed</td></tr>
+          <tr><td>Survivors (<kbd>E</kbd>)</td><td>Each one reveals a terminal to your squad once. Won't talk with a drone within 12 m</td></tr>
+          <tr><td>Pings (right click / <kbd>G</kbd>)</td><td>Mark a spot for your squad, also by clicking the big map</td></tr>
+        </table>
+        <h3>Classes</h3>
+        <div id="help-classes"></div>
+      </section>
+    </div>
+  </div>
+
+  <div id="bigmap" class="hidden">
+    <div class="bigmap-inner">
+      <div class="bigmap-head"><span>CITY GRID — click anywhere to ping your squad</span><button class="close" aria-label="Close">✕</button></div>
+      <canvas id="bigmap-canvas"></canvas>
+    </div>
+  </div>
+
+  <div id="terminal" class="modal hidden">
+    <div class="term-window">
+      <div class="term-head"><span class="term-title"></span><button class="close" aria-label="Close">✕</button></div>
+      <div class="term-meta"></div>
+      <pre class="term-prompt"></pre>
+      <div class="term-hint hidden"></div>
+      <form class="term-form">
+        <span class="caret">&gt;</span>
+        <input class="term-input" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Answer">
+        <button type="submit">EXECUTE</button>
+      </form>
+      <div class="term-foot"><button class="term-hint-btn" type="button"></button><span class="term-status"></span></div>
+      <div class="term-result hidden"></div>
+    </div>
+  </div>
+
+  <div id="core-modal" class="modal hidden">
+    <div class="term-window core-window">
+      <div class="term-head"><span>NEXUS CORE // OVERRIDE</span><button class="close" aria-label="Close">✕</button></div>
+      <p class="core-desc"></p>
+      <form id="core-form">
+        <div id="core-slots"></div>
+        <button type="submit" class="big-btn">Override the Core</button>
+      </form>
+      <div class="core-status"></div>
+    </div>
+  </div>
+
+  <div id="intro">
+    <div id="loading"><div class="load-label">Loading the city…</div><div class="load-track"><div id="load-bar"></div></div></div>
+    <div id="boot"></div>
+    <div id="join" class="hidden">
+      <h1 class="logo" data-text="NEXUS BREACH">NEXUS BREACH</h1>
+      <p class="tagline">The machines took the city. Your cell has one night to take it back.</p>
+      <form id="join-form" autocomplete="off">
+        <label class="field">
+          <span>Callsign</span>
+          <input id="callsign" maxlength="16" required placeholder="max 16 characters">
+        </label>
+        <div class="field"><span>Squad (max 4)</span>
+          <div id="squad-list" class="cards factions">
+            <button type="button" class="card" data-mode="random"><div class="t">FIND ME A SQUAD</div><div class="s">Playing alone? Join a squad with free seats</div></button>
+            <button type="button" class="card" data-mode="create"><div class="t">START A SQUAD</div><div class="s">Get a code to share with friends</div></button>
+            <button type="button" class="card" data-mode="join"><div class="t">JOIN WITH A CODE</div><div class="s">A friend already started one</div></button>
+          </div>
+          <div id="squad-extra">
+            <input id="squad-code" maxlength="12" placeholder="e.g. RAVEN-42" autocomplete="off" spellcheck="false">
+            <label id="squad-open"><input type="checkbox" checked> Let solo players fill empty seats</label>
+          </div>
+        </div>
+        <div class="field"><span>Class</span><div id="class-list" class="cards classes"></div></div>
+        <div class="field"><span>Graphics</span><div id="quality-list" class="cards quality">
+          <button type="button" class="card" data-q="low"><div class="t">LOW</div><div class="s">Older laptops</div></button>
+          <button type="button" class="card" data-q="medium"><div class="t">MEDIUM</div><div class="s">Laptops without a graphics card</div></button>
+          <button type="button" class="card" data-q="high"><div class="t">HIGH</div><div class="s">Gaming PCs · sharper light</div></button>
+        </div></div>
+        <button type="submit" class="big-btn" id="join-btn">Jack in</button>
+        <div id="join-error" role="alert"></div>
+        <button type="button" id="watch-prologue">▸ Watch the prologue</button>
+      </form>
+      <details class="howto">
+        <summary>How to play</summary>
+        <ol>
+          <li><b>Crack terminals</b> (glowing cyan pillars) with <kbd>E</kbd>. Each one gives your squad <b>one letter</b> of the passphrase. Most answers are hidden somewhere <b>out in the city</b>.</li>
+          <li>Unscramble the letters and enter the phrase at the <b>Nexus Core</b> in the centre.</li>
+          <li>Then <b>hold the Core</b> (90 s, longer if you're missing letters) with more of your squad than any rival squad. The first finished upload wins.</li>
+          <li><b>Drones</b> see your light and hear you sprint. Crouch, go dark, stay still. Your base is safe.</li>
+        </ol>
+        <button type="button" class="help-open">Open the field manual (all controls &amp; tricks) · <kbd>H</kbd> in game</button>
+      </details>
+    </div>
+  </div>
+
+  <div id="endscreen" class="hidden"></div>
+  <div id="conn-status" class="hidden">SIGNAL LOST — reconnecting…</div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    // graphics preset picker (applied on next load)
+    (function () {
+      // main.js marks the active preset (it auto-detects integrated GPUs)
+      document.querySelectorAll('#quality-list .card').forEach(function (b) {
+        b.addEventListener('click', function () {
+          var cur = document.querySelector('#quality-list .card.sel');
+          try { localStorage.setItem('nexus_quality', b.dataset.q); } catch (e) {}
+          if (!cur || b.dataset.q !== cur.dataset.q) location.reload();
+        });
+      });
+    })();
+  </script>
+  <script type="module" src="/js/main.js"></script>
+</body>
+</html>
